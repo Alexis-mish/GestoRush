@@ -215,15 +215,7 @@ function App() {
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
-        .then(() => {
-          // Lock orientation to vertical (portrait) on mobile devices
-          const orientation = window.screen && window.screen.orientation;
-          if (orientation && (orientation as any).lock) {
-            (orientation as any).lock('portrait').catch(() => {});
-          }
-        })
-        .catch(() => {});
+      document.documentElement.requestFullscreen().catch(() => {});
       setIsFullscreen(true);
     } else {
       document.exitFullscreen().catch(() => {});
@@ -1010,10 +1002,7 @@ function App() {
                           style={{
                             backgroundColor: slotCard.difficulty === 'Fácil' ? 'var(--card-easy)' : slotCard.difficulty === 'Medio' ? 'var(--card-medium)' : 'var(--card-hard)',
                             color: 'white',
-                            transform: activeTouch?.card.id === slotCard.id
-                              ? `translate(${activeTouch.currentX - activeTouch.startX}px, ${activeTouch.currentY - activeTouch.startY}px) scale(1.12)`
-                              : 'none',
-                            zIndex: activeTouch?.card.id === slotCard.id ? 1000 : 5,
+                            opacity: activeTouch?.card.id === slotCard.id ? 0.35 : 1,
                             touchAction: 'none'
                           }}
                         >
@@ -1095,10 +1084,7 @@ function App() {
                         boxShadow: '1.5px 1.5px 0 var(--color-dark)',
                         cursor: 'grab',
                         padding: '2px',
-                        transform: activeTouch?.card.id === card.id
-                          ? `translate(${activeTouch.currentX - activeTouch.startX}px, ${activeTouch.currentY - activeTouch.startY}px) scale(1.15)`
-                          : 'none',
-                        zIndex: activeTouch?.card.id === card.id ? 1000 : 1,
+                        opacity: activeTouch?.card.id === card.id ? 0.35 : 1,
                         touchAction: 'none'
                       }}
                     >
@@ -1386,6 +1372,57 @@ function App() {
               ¡Entendido! 🎮
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Global Touch Drag Preview to prevent z-index / stacking context issues */}
+      {activeTouch && (
+        <div
+          style={{
+            position: 'fixed',
+            left: `${activeTouch.currentX - 40}px`,
+            top: `${activeTouch.currentY - (activeTouch.sourceSlotIdx !== null ? 70 : 27)}px`,
+            width: '80px',
+            height: activeTouch.sourceSlotIdx !== null ? '120px' : '55px',
+            border: '3px solid var(--accent-yellow)',
+            borderRadius: activeTouch.sourceSlotIdx !== null ? '10px' : '8px',
+            background: activeTouch.card.difficulty === 'Fácil' ? 'var(--card-easy)' : activeTouch.card.difficulty === 'Medio' ? 'var(--card-medium)' : 'var(--card-hard)',
+            color: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            boxShadow: '4px 4px 0 var(--color-dark)',
+            pointerEvents: 'none',
+            zIndex: 99999,
+            transform: 'scale(1.15)',
+            padding: '6px 4px',
+            boxSizing: 'border-box'
+          }}
+        >
+          {activeTouch.sourceSlotIdx !== null && <div className="card-title-header" style={{ width: '100%', height: '10px', marginBottom: '4px' }}></div>}
+          <span style={{ 
+            background: '#fff', 
+            color: '#111', 
+            fontSize: getCardFontSize(activeTouch.card.word, activeTouch.sourceSlotIdx === null), 
+            border: '1.5px solid #111', 
+            padding: '2px 4px', 
+            borderRadius: '6px', 
+            width: '100%', 
+            boxSizing: 'border-box',
+            lineHeight: '1.15',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+            whiteSpace: 'normal',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexGrow: 1,
+            textAlign: 'center'
+          }}>
+            {activeTouch.card.word}
+          </span>
+          {activeTouch.sourceSlotIdx !== null && <span className="card-points" style={{ fontSize: '0.75rem', fontWeight: 900, marginTop: '4px' }}>+{activeTouch.card.points} pts</span>}
         </div>
       )}
     </div>
