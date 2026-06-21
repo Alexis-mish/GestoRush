@@ -34,6 +34,32 @@ function App() {
     { id: '1', name: 'Equipo Rojo', score: 0, color: '#EF4444' },
     { id: '2', name: 'Equipo Azul', score: 0, color: '#3B82F6' },
   ]);
+  
+  const TEAM_COLORS = ['#EF4444', '#3B82F6', '#22C55E', '#EAB308', '#A855F7', '#F97316', '#EC4899', '#06B6D4'];
+
+  const addTeam = () => {
+    if (teams.length >= 8) {
+      alert('¡El límite es de 8 equipos!');
+      return;
+    }
+    sound.playSave();
+    const nextIdx = teams.length;
+    const color = TEAM_COLORS[nextIdx] || `#${Math.floor(Math.random()*16777215).toString(16)}`;
+    const teamNames = ['Rojo', 'Azul', 'Verde', 'Amarillo', 'Púrpura', 'Naranja', 'Rosa', 'Celeste'];
+    const defaultName = `Equipo ${teamNames[nextIdx] || nextIdx + 1}`;
+    
+    setTeams(prev => [
+      ...prev,
+      { id: `${Date.now()}`, name: defaultName, score: 0, color }
+    ]);
+  };
+
+  const removeTeam = (id: string) => {
+    if (teams.length <= 2) return;
+    sound.playDrag();
+    setTeams(prev => prev.filter(t => t.id !== id));
+  };
+
   const [rounds, setRounds] = useState<number>(3);
   const [currentRound, setCurrentRound] = useState<number>(1);
   const [currentTeamIdx, setCurrentTeamIdx] = useState<number>(0);
@@ -71,15 +97,34 @@ function App() {
     turnTimeLeftRef.current = turnTimeLeft;
   }, [turnTimeLeft]);
 
-  // Sync fullscreen state changes
+  // Sync fullscreen state changes and handle BGM autoplay on mount/interaction
   useEffect(() => {
     const handleFSChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
     document.addEventListener('fullscreenchange', handleFSChange);
+
+    // Try to play BGM immediately
+    sound.playBGM();
+
+    // Fallback: start BGM on first user interaction anywhere (bypasses browser autoplay restrictions)
+    const startBGMOnInteraction = () => {
+      sound.playBGM();
+      window.removeEventListener('click', startBGMOnInteraction);
+      window.removeEventListener('touchstart', startBGMOnInteraction);
+      window.removeEventListener('keydown', startBGMOnInteraction);
+    };
+
+    window.addEventListener('click', startBGMOnInteraction);
+    window.addEventListener('touchstart', startBGMOnInteraction);
+    window.addEventListener('keydown', startBGMOnInteraction);
+
     return () => {
       document.removeEventListener('fullscreenchange', handleFSChange);
       if (timerRef.current) clearInterval(timerRef.current);
+      window.removeEventListener('click', startBGMOnInteraction);
+      window.removeEventListener('touchstart', startBGMOnInteraction);
+      window.removeEventListener('keydown', startBGMOnInteraction);
     };
   }, []);
 
@@ -577,22 +622,45 @@ function App() {
 
           <div className="cartoon-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 0 }}>
             <div>
-              <h3 style={{ fontSize: '1.1rem' }}>Equipos</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Equipos</h3>
+                {teams.length < 8 && (
+                  <button 
+                    className="cartoon-btn" 
+                    style={{ padding: '4px 10px', fontSize: '0.8rem', background: 'var(--card-easy)' }}
+                    onClick={addTeam}
+                  >
+                    + Añadir
+                  </button>
+                )}
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px', maxHeight: '160px', overflowY: 'auto', paddingRight: '4px' }}>
                 {teams.map((team, idx) => (
                   <div key={team.id} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ display: 'inline-block', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: team.color, border: '2px solid #111' }}></span>
+                    <span style={{ display: 'inline-block', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: team.color, border: '2px solid #111', flexShrink: 0 }}></span>
                     <input
                       type="text"
                       className="cartoon-input"
                       value={team.name}
                       onChange={(e) => setTeams(prev => {
                         const n = [...prev];
-                        n[idx].name = e.target.value;
+                        const match = n.find(t => t.id === team.id);
+                        if (match) match.name = e.target.value;
                         return n;
                       })}
                       placeholder={`Nombre del Equipo ${idx + 1}`}
+                      style={{ flex: 1 }}
                     />
+                    {teams.length > 2 && (
+                      <button
+                        className="cartoon-btn"
+                        style={{ padding: '6px 10px', fontSize: '0.8rem', background: '#EF4444', color: 'white', border: '2px solid #111', borderRadius: '8px', flexShrink: 0 }}
+                        onClick={() => removeTeam(team.id)}
+                      >
+                        🗑️
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
