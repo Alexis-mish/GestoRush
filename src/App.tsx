@@ -524,7 +524,7 @@ function App() {
 
       {/* A. TITLE SCREEN */}
       {screen === 'title' && (
-        <div className="screen-layout animate-pop" style={{ justifyContent: 'center', gap: '20px' }}>
+        <div className="screen-layout screen-title-entrance" style={{ justifyContent: 'center', gap: '20px' }}>
           <div className="cartoon-card animate-float" style={{ padding: '30px 15px', textAlign: 'center' }}>
             <div style={{ fontSize: '4.5rem', marginBottom: '8px' }}>🎭</div>
             <h1 className="game-title" style={{ margin: '0 0 10px 0' }}>¡GESTO RUSH!</h1>
@@ -545,7 +545,7 @@ function App() {
 
       {/* B. SETUP SCREEN */}
       {screen === 'setup' && (
-        <div className="screen-layout animate-pop">
+        <div className="screen-layout screen-pop-elastic">
           <div className="cartoon-card" style={{ textAlign: 'center', padding: '10px' }}>
             <h2 style={{ fontSize: '1.4rem', margin: 0 }}>Configurar Partida ⚙️</h2>
           </div>
@@ -633,7 +633,7 @@ function App() {
 
       {/* C. TURN INTRO SCREEN */}
       {screen === 'turn-intro' && (
-        <div className="screen-layout animate-pop" style={{ justifyContent: 'center', gap: '16px' }}>
+        <div className="screen-layout screen-slide-right" style={{ justifyContent: 'center', gap: '16px' }}>
           <div className="cartoon-card" style={{ backgroundColor: activeTeam.color, color: '#1E1E24', textAlign: 'center', padding: '24px 12px' }}>
             <h2 style={{ fontSize: '1.5rem', margin: 0 }}>RONDA {currentRound} DE {rounds}</h2>
             <h1 style={{ fontSize: '2.1rem', margin: '10px 0', textShadow: '2px 2px 0px #fff' }}>¡Turno de {activeTeam.name}!</h1>
@@ -660,7 +660,7 @@ function App() {
 
       {/* D1. CARD SELECTION SCREEN */}
       {screen === 'card-selection' && (
-        <div className="screen-layout animate-pop">
+        <div className="screen-layout screen-slide-bottom">
           <div className="cartoon-card" style={{ padding: '8px 12px', marginBottom: '8px', textAlign: 'center' }}>
             <h3 style={{ margin: 0, fontSize: '1.05rem' }}>🃏 {actorName}, Elige tus 4 cartas</h3>
             <p style={{ margin: 0, fontSize: '0.8rem', color: '#555' }}>
@@ -790,7 +790,7 @@ function App() {
 
       {/* D2. PREPARATION / ARRANGE SCREEN */}
       {screen === 'preparation' && (
-        <div className="screen-layout animate-pop">
+        <div className="screen-layout screen-slide-right">
           {/* Header */}
           <div className="cartoon-card" style={{ padding: '8px 12px', marginBottom: '6px', textAlign: 'center' }}>
             <h3 style={{ margin: 0, fontSize: '1.05rem' }}>🧩 Acomoda las cartas en la Claqueta</h3>
@@ -956,7 +956,7 @@ function App() {
 
       {/* E. ACTIVE GAME SCREEN */}
       {screen === 'action' && (
-        <div className="screen-layout">
+        <div className="screen-layout screen-pop-elastic">
           {/* Header & Mask Toggle */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
             <div className="cartoon-card" style={{ padding: '6px 12px', margin: 0, background: activeTeam.color, flex: 1 }}>
@@ -1055,7 +1055,7 @@ function App() {
 
       {/* F. TURN SUMMARY SCREEN */}
       {screen === 'summary' && (
-        <div className="screen-layout animate-pop">
+        <div className="screen-layout screen-pop-elastic">
           <div className="cartoon-card" style={{ textAlign: 'center', margin: '8px 0' }}>
             <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Turno de {activeTeam.name} 🎬</h2>
             <h1 style={{ fontSize: '3rem', margin: '4px 0', color: turnPointsEarned > 0 ? 'var(--card-easy)' : 'var(--card-hard)' }}>
@@ -1116,7 +1116,7 @@ function App() {
 
       {/* G. GAME OVER SCREEN */}
       {screen === 'game-over' && (
-        <div className="screen-layout animate-pop" style={{ justifyContent: 'center', gap: '16px' }}>
+        <div className="screen-layout screen-pop-elastic" style={{ justifyContent: 'center', gap: '16px' }}>
           <div className="cartoon-card animate-float" style={{ textAlign: 'center', background: 'var(--accent-yellow)', padding: '24px 12px' }}>
             <h1 className="game-title" style={{ fontSize: '2rem', margin: '0 0 10px 0' }}>🏆 ¡FIN DE JUEGO! 🏆</h1>
             
