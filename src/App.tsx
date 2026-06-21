@@ -88,6 +88,85 @@ function App() {
   const [selectedTrayCard, setSelectedTrayCard] = useState<WordCard | null>(null);
   const [selectedSlotIdx, setSelectedSlotIdx] = useState<number | null>(null);
 
+  // Mobile Touch Drag State & Handlers
+  interface TouchState {
+    card: WordCard;
+    sourceSlotIdx: number | null;
+    startX: number;
+    startY: number;
+    currentX: number;
+    currentY: number;
+  }
+  const [activeTouch, setActiveTouch] = useState<TouchState | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent, card: WordCard, sourceSlotIdx: number | null) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    sound.playDrag();
+    setActiveTouch({
+      card,
+      sourceSlotIdx,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      currentX: touch.clientX,
+      currentY: touch.clientY
+    });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!activeTouch) return;
+    const touch = e.touches[0];
+    setActiveTouch(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        currentX: touch.clientX,
+        currentY: touch.clientY
+      };
+    });
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!activeTouch) return;
+    const touch = e.changedTouches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    let targetSlotIdx: number | null = null;
+    let curr = element;
+    while (curr) {
+      if (curr.classList.contains('claqueta-slot-target')) {
+        const idxAttr = curr.getAttribute('data-slot-idx');
+        if (idxAttr !== null) {
+          targetSlotIdx = parseInt(idxAttr, 10);
+        }
+        break;
+      }
+      curr = curr.parentElement;
+    }
+
+    if (targetSlotIdx !== null) {
+      sound.playSave();
+      if (activeTouch.sourceSlotIdx !== null) {
+        setSlots(prev => {
+          const next = [...prev];
+          const temp = next[activeTouch.sourceSlotIdx!];
+          next[activeTouch.sourceSlotIdx!] = next[targetSlotIdx!];
+          next[targetSlotIdx!] = temp;
+          return next;
+        });
+      } else {
+        setSlots(prev => {
+          const next = [...prev];
+          const prevIdx = next.findIndex(s => s?.id === activeTouch.card.id);
+          if (prevIdx !== -1) next[prevIdx] = null;
+          next[targetSlotIdx!] = activeTouch.card;
+          return next;
+        });
+      }
+    }
+    setActiveTouch(null);
+  };
+
   // Refs for tracking timer
   const timerRef = useRef<number | null>(null);
   const turnTimeLeftRef = useRef<number>(60);
@@ -136,7 +215,15 @@ function App() {
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+      document.documentElement.requestFullscreen()
+        .then(() => {
+          // Lock orientation to vertical (portrait) on mobile devices
+          const orientation = window.screen && window.screen.orientation;
+          if (orientation && (orientation as any).lock) {
+            (orientation as any).lock('portrait').catch(() => {});
+          }
+        })
+        .catch(() => {});
       setIsFullscreen(true);
     } else {
       document.exitFullscreen().catch(() => {});
@@ -910,15 +997,24 @@ function App() {
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={(e) => handleSlotDrop(e, idx)}
                       onClick={() => handleSlotClick(idx)}
+                      data-slot-idx={idx}
                     >
                       {slotCard ? (
                         <div 
                           className="card-standing" 
                           draggable
                           onDragStart={(e) => handleSlotDragStart(e, idx)}
+                          onTouchStart={(e) => handleTouchStart(e, slotCard, idx)}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
                           style={{
                             backgroundColor: slotCard.difficulty === 'Fácil' ? 'var(--card-easy)' : slotCard.difficulty === 'Medio' ? 'var(--card-medium)' : 'var(--card-hard)',
-                            color: 'white'
+                            color: 'white',
+                            transform: activeTouch?.card.id === slotCard.id
+                              ? `translate(${activeTouch.currentX - activeTouch.startX}px, ${activeTouch.currentY - activeTouch.startY}px) scale(1.12)`
+                              : 'none',
+                            zIndex: activeTouch?.card.id === slotCard.id ? 1000 : 5,
+                            touchAction: 'none'
                           }}
                         >
                           <button 
@@ -979,6 +1075,9 @@ function App() {
                       draggable
                       onDragStart={() => handleTrayDragStart(card)}
                       onClick={() => handleTrayCardClick(card)}
+                      onTouchStart={(e) => handleTouchStart(e, card, null)}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
                       style={{
                         flex: '0 0 80px',
                         height: '55px',
@@ -995,7 +1094,12 @@ function App() {
                         textAlign: 'center',
                         boxShadow: '1.5px 1.5px 0 var(--color-dark)',
                         cursor: 'grab',
-                        padding: '2px'
+                        padding: '2px',
+                        transform: activeTouch?.card.id === card.id
+                          ? `translate(${activeTouch.currentX - activeTouch.startX}px, ${activeTouch.currentY - activeTouch.startY}px) scale(1.15)`
+                          : 'none',
+                        zIndex: activeTouch?.card.id === card.id ? 1000 : 1,
+                        touchAction: 'none'
                       }}
                     >
                       <span style={{ 

@@ -682,20 +682,39 @@ h2, h3, h4 {
 }
 
 /* --- Responsive Scaling Styles for Heights & Widths --- */
-@media (max-height: 660px) {
+@media (max-height: 780px) and (max-width: 480px) {
   .claqueta-board {
+    transform: scale(0.82);
+    margin: -18px 0;
+  }
+  .hanging-sign-container {
     transform: scale(0.85);
-    margin: -15px 0;
+  }
+  .deck-pile {
+    height: 60px;
+  }
+  .top-bar {
+    height: 38px;
+  }
+}
+
+@media (max-height: 680px) {
+  .claqueta-board {
+    transform: scale(0.74);
+    margin: -25px 0;
   }
   h1.game-title {
     font-size: 1.8rem;
+  }
+  .hanging-sign-container {
+    transform: scale(0.75);
   }
   .decks-container {
     margin-bottom: 4px;
     padding: 4px;
   }
   .deck-pile {
-    height: 65px;
+    height: 52px;
   }
   .cartoon-card {
     padding: 8px 12px;
@@ -703,32 +722,36 @@ h2, h3, h4 {
   }
 }
 
-@media (max-height: 560px) {
+@media (max-height: 580px) {
   .claqueta-board {
-    transform: scale(0.72);
-    margin: -35px 0;
+    transform: scale(0.62);
+    margin: -45px 0;
+  }
+  .hanging-sign-container {
+    transform: scale(0.65);
+    margin-top: 15px;
   }
   .deck-pile {
-    height: 50px;
+    height: 44px;
   }
   .deck-pile .deck-title {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   .deck-pile .deck-subtitle {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
   }
   .cartoon-btn {
-    padding: 8px 16px;
-    font-size: 1rem;
+    padding: 6px 12px;
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 380px) {
   .claqueta-board {
-    transform: scale(0.88);
+    transform: scale(0.85);
   }
   .deck-pile .deck-title {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
