@@ -695,109 +695,114 @@ function App() {
       {/* B. SETUP SCREEN */}
       {screen === 'setup' && (
         <div className="screen-layout screen-pop-elastic">
-          <div className="cartoon-card" style={{ textAlign: 'center', padding: '10px' }}>
-            <h2 style={{ fontSize: '1.4rem', margin: 0 }}>Configurar Partida ⚙️</h2>
+          <div className="cartoon-card" style={{ textAlign: 'center', padding: '10px', marginBottom: '8px' }}>
+            <h2 style={{ fontSize: '1.3rem', margin: 0 }}>Configurar Partida ⚙️</h2>
           </div>
 
-          <div className="cartoon-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 0 }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Equipos</h3>
-                {teams.length < 8 && (
-                  <button 
-                    className="cartoon-btn" 
-                    style={{ padding: '4px 10px', fontSize: '0.8rem', background: 'var(--card-easy)' }}
-                    onClick={addTeam}
-                  >
-                    + Añadir
-                  </button>
-                )}
-              </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px', maxHeight: '160px', overflowY: 'auto', paddingRight: '4px' }}>
-                {teams.map((team, idx) => (
-                  <div key={team.id} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ display: 'inline-block', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: team.color, border: '2px solid #111', flexShrink: 0 }}></span>
-                    <input
-                      type="text"
-                      className="cartoon-input"
-                      value={team.name}
-                      onChange={(e) => setTeams(prev => {
-                        const n = [...prev];
-                        const match = n.find(t => t.id === team.id);
-                        if (match) match.name = e.target.value;
-                        return n;
-                      })}
-                      placeholder={`Nombre del Equipo ${idx + 1}`}
-                      style={{ flex: 1 }}
-                    />
-                    {teams.length > 2 && (
-                      <button
-                        className="cartoon-btn"
-                        style={{ padding: '6px 10px', fontSize: '0.8rem', background: '#EF4444', color: 'white', border: '2px solid #111', borderRadius: '8px', flexShrink: 0 }}
-                        onClick={() => removeTeam(team.id)}
-                      >
-                        🗑️
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <label style={{ fontWeight: 700, fontSize: '0.95rem' }}>Rondas:</label>
-                <select 
-                  className="cartoon-input" 
-                  value={rounds} 
-                  onChange={(e) => setRounds(Number(e.target.value))}
-                  style={{ width: '70px', padding: '4px' }}
-                >
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                  <option value={7}>7</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Custom Words Section (Borrable Digital) */}
-            <div style={{ marginTop: '12px', borderTop: '2px dashed #ccc', paddingTop: '10px' }}>
-              <h3 style={{ fontSize: '1rem', margin: '0 0 4px 0' }}>📝 Palabras Custom</h3>
-              <div style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
-                <input
-                  type="text"
-                  className="cartoon-input"
-                  value={customWordsInput}
-                  onChange={(e) => setCustomWordsInput(e.target.value)}
-                  placeholder="ej: Batman, Comer limón"
-                  style={{ padding: '6px 10px', fontSize: '0.85rem' }}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddCustomWords()}
-                />
-                <button className="cartoon-btn" style={{ padding: '6px 12px', fontSize: '0.9rem' }} onClick={handleAddCustomWords}>Añadir</button>
-              </div>
-              
-              {customWordPool.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', maxHeight: '55px', overflowY: 'auto', padding: '4px', background: 'rgba(0,0,0,0.05)', borderRadius: '8px' }}>
-                  {customWordPool.map((word, idx) => (
-                    <span 
-                      key={idx} 
-                      style={{ fontSize: '0.75rem', background: '#fff', border: '2px solid #111', padding: '1px 6px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '2px' }}
+          <div className="cartoon-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, padding: '10px 14px', marginBottom: '8px' }}>
+            <div className="setup-grid-layout">
+              {/* Left Column */}
+              <div className="setup-column-left">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <h3 style={{ fontSize: '1rem', margin: 0 }}>Equipos</h3>
+                  {teams.length < 8 && (
+                    <button 
+                      className="cartoon-btn" 
+                      style={{ padding: '3px 8px', fontSize: '0.75rem', background: 'var(--card-easy)' }}
+                      onClick={addTeam}
                     >
-                      {word}
-                      <button 
-                        style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', color: 'red', padding: 0 }}
-                        onClick={() => setCustomWordPool(prev => prev.filter((_, i) => i !== idx))}
-                      >
-                        ×
-                      </button>
-                    </span>
+                      + Añadir
+                    </button>
+                  )}
+                </div>
+                
+                <div className="setup-teams-list">
+                  {teams.map((team, idx) => (
+                    <div key={team.id} style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <span style={{ display: 'inline-block', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: team.color, border: '2px solid #111', flexShrink: 0 }}></span>
+                      <input
+                        type="text"
+                        className="cartoon-input"
+                        value={team.name}
+                        onChange={(e) => setTeams(prev => {
+                          const n = [...prev];
+                          const match = n.find(t => t.id === team.id);
+                          if (match) match.name = e.target.value;
+                          return n;
+                        })}
+                        placeholder={`Nombre del Equipo ${idx + 1}`}
+                        style={{ flex: 1, padding: '4px 8px', fontSize: '0.85rem' }}
+                      />
+                      {teams.length > 2 && (
+                        <button
+                          className="cartoon-btn"
+                          style={{ padding: '4px 8px', fontSize: '0.75rem', background: '#EF4444', color: 'white', border: '2px solid #111', borderRadius: '6px', flexShrink: 0 }}
+                          onClick={() => removeTeam(team.id)}
+                        >
+                          🗑️
+                        </button>
+                      )}
+                    </div>
                   ))}
                 </div>
-              )}
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                  <label style={{ fontWeight: 700, fontSize: '0.85rem' }}>Rondas:</label>
+                  <select 
+                    className="cartoon-input" 
+                    value={rounds} 
+                    onChange={(e) => setRounds(Number(e.target.value))}
+                    style={{ width: '65px', padding: '2px 4px', fontSize: '0.85rem' }}
+                  >
+                    <option value={3}>3</option>
+                    <option value={4}/><option value={4}>4</option>
+                    <option value={5}>5</option>
+                    <option value={7}>7</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="setup-column-right">
+                <h3 style={{ fontSize: '1rem', margin: '0 0 4px 0' }}>📝 Palabras Custom</h3>
+                <div style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
+                  <input
+                    type="text"
+                    className="cartoon-input"
+                    value={customWordsInput}
+                    onChange={(e) => setCustomWordsInput(e.target.value)}
+                    placeholder="ej: Batman, Comer limón"
+                    style={{ padding: '4px 8px', fontSize: '0.8rem' }}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddCustomWords()}
+                  />
+                  <button className="cartoon-btn" style={{ padding: '4px 10px', fontSize: '0.8rem' }} onClick={handleAddCustomWords}>Añadir</button>
+                </div>
+                
+                <div className="setup-custom-words-bag">
+                  {customWordPool.length > 0 ? (
+                    customWordPool.map((word, idx) => (
+                      <span 
+                        key={idx} 
+                        style={{ fontSize: '0.7rem', background: '#fff', border: '1.5px solid #111', padding: '1px 5px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '2px' }}
+                      >
+                        {word}
+                        <button 
+                          style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', color: 'red', padding: 0 }}
+                          onClick={() => setCustomWordPool(prev => prev.filter((_, i) => i !== idx))}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))
+                  ) : (
+                    <span style={{ fontSize: '0.75rem', opacity: 0.5, fontStyle: 'italic', padding: '4px' }}>Ninguna palabra añadida</span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
-          <button className="cartoon-btn" style={{ width: '100%', marginTop: '6px' }} onClick={() => { sound.playSave(); setScreen('turn-intro'); }}>
+          <button className="cartoon-btn" style={{ width: '100%', marginTop: '4px' }} onClick={() => { sound.playSave(); setScreen('turn-intro'); }}>
             Continuar ➡️
           </button>
         </div>
