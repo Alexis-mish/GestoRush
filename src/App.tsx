@@ -474,7 +474,10 @@ function App() {
           sound.playBuzzer(); // Buzz timbre!
 
           setTimeout(() => {
-            endTurn(true);
+            setCardStatus(current => {
+              endTurn(current, true);
+              return current;
+            });
           }, 450);
           return 0;
         }
@@ -549,7 +552,7 @@ function App() {
         sound.playClapboard(); // Switch click!
 
         setTimeout(() => {
-          endTurn(false);
+          endTurn(current, false);
         }, 450);
       }
       return current;
@@ -557,12 +560,12 @@ function App() {
   };
 
   // End Turn
-  const endTurn = (timeEnded: boolean = false) => {
+  const endTurn = (finalStatus: Record<string, 'active' | 'saved' | 'sunk'>, timeEnded: boolean = false) => {
     sound.playBGM();
 
     let turnPoints = 0;
     slots.forEach(card => {
-      if (card && cardStatus[card.id] === 'saved') {
+      if (card && finalStatus[card.id] === 'saved') {
         turnPoints += card.points;
       }
     });
@@ -1235,7 +1238,7 @@ function App() {
             </p>
           </div>
 
-          <button className="cartoon-btn" style={{ background: '#EF4444', padding: '10px' }} onClick={() => endTurn(false)}>
+          <button className="cartoon-btn" style={{ background: '#EF4444', padding: '10px' }} onClick={() => endTurn(cardStatus, false)}>
             Terminar Turno Prontamente 🛑
           </button>
         </div>
