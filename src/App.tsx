@@ -694,7 +694,7 @@ function App() {
 
       {/* B. SETUP SCREEN */}
       {screen === 'setup' && (
-        <div className="screen-layout screen-pop-elastic">
+        <div className="screen-layout screen-pop-elastic setup-screen-layout">
           <div className="cartoon-card" style={{ textAlign: 'center', padding: '10px', marginBottom: '8px' }}>
             <h2 style={{ fontSize: '1.3rem', margin: 0 }}>Configurar Partida ⚙️</h2>
           </div>
@@ -837,7 +837,7 @@ function App() {
 
       {/* D1. CARD SELECTION SCREEN */}
       {screen === 'card-selection' && (
-        <div className="screen-layout screen-slide-bottom">
+        <div className="screen-layout screen-slide-bottom card-selection-screen-layout">
           <div className="cartoon-card" style={{ padding: '8px 12px', marginBottom: '8px', textAlign: 'center' }}>
             <h3 style={{ margin: 0, fontSize: '1.05rem' }}>🃏 {actorName}, Elige tus 4 cartas</h3>
             <p style={{ margin: 0, fontSize: '0.8rem', color: '#555' }}>
@@ -850,7 +850,7 @@ function App() {
             <h4 style={{ textAlign: 'center', fontSize: '0.95rem', margin: '0 0 10px 0' }}>
               Elegidas: {chosenCards.length}/4
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', width: '100%' }}>
+            <div className="chosen-cards-grid">
               {[0, 1, 2, 3].map((idx) => {
                 const card = chosenCards[idx];
                 return (
@@ -967,7 +967,7 @@ function App() {
 
       {/* D2. PREPARATION / ARRANGE SCREEN */}
       {screen === 'preparation' && (
-        <div className="screen-layout screen-slide-right">
+        <div className="screen-layout screen-slide-right preparation-screen-layout">
           {/* Header */}
           <div className="cartoon-card" style={{ padding: '8px 12px', marginBottom: '6px', textAlign: 'center' }}>
             <h3 style={{ margin: 0, fontSize: '1.05rem' }}>🧩 Acomoda las cartas en la Claqueta</h3>
@@ -1144,7 +1144,7 @@ function App() {
 
       {/* E. ACTIVE GAME SCREEN */}
       {screen === 'action' && (
-        <div className="screen-layout screen-pop-elastic">
+        <div className="screen-layout screen-pop-elastic action-screen-layout">
           {/* Header & Mask Toggle */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
             <div className="cartoon-card" style={{ padding: '6px 12px', margin: 0, background: activeTeam.color, flex: 1 }}>
