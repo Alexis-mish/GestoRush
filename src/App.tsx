@@ -524,18 +524,43 @@ function App() {
 
       {/* A. TITLE SCREEN */}
       {screen === 'title' && (
-        <div className="screen-layout screen-title-entrance" style={{ justifyContent: 'center', gap: '20px' }}>
-          <div className="cartoon-card animate-float" style={{ padding: '30px 15px', textAlign: 'center' }}>
-            <div style={{ fontSize: '4.5rem', marginBottom: '8px' }}>🎭</div>
-            <h1 className="game-title" style={{ margin: '0 0 10px 0' }}>¡GESTO RUSH!</h1>
-            <p style={{ fontWeight: 600, fontSize: '1.05rem', color: '#6b6375', margin: 0 }}>
+        <div className="screen-layout screen-pop-elastic" style={{ justifyContent: 'space-between', padding: '15px 0 5px 0' }}>
+          <div style={{ marginTop: '35px', width: '100%', flexShrink: 0 }}>
+            <div className="hanging-sign-container">
+              <div className="rope left-rope"></div>
+              <div className="rope right-rope"></div>
+              <div className="wooden-board">
+                <div className="board-line board-line-1"></div>
+                <div className="board-line board-line-2"></div>
+                <div className="hanger-hole left-hole"></div>
+                <div className="hanger-hole right-hole"></div>
+                
+                <span className="sign-icon left-icon">👋</span>
+                
+                <div className="sign-text-container">
+                  <span className="sign-title-top">GESTO</span>
+                  <span className="sign-title-bottom">RUSH</span>
+                </div>
+                
+                <span className="sign-icon right-icon">🎭</span>
+                
+                <span className="sign-star star-1">★</span>
+                <span className="sign-star star-2">★</span>
+                <span className="sign-star star-3">★</span>
+                <span className="sign-star star-4">★</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="cartoon-card" style={{ padding: '12px', textAlign: 'center', margin: '15px 0' }}>
+            <p style={{ fontWeight: 600, fontSize: '0.95rem', color: '#6b6375', margin: 0 }}>
               El clásico juego de mímica a toda velocidad. ¡Elige tus cartas, ordénalas en la claqueta y adivina antes de que sea tarde!
             </p>
           </div>
           
           <button 
             className="cartoon-btn" 
-            style={{ padding: '16px', fontSize: '1.6rem', background: 'var(--accent-yellow)' }}
+            style={{ padding: '14px', fontSize: '1.5rem', background: 'var(--accent-yellow)', width: '100%' }}
             onClick={startSetup}
           >
             ¡JUGAR! 🚀
