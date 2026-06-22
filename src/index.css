@@ -1143,4 +1143,87 @@ h2, h3, h4 {
   .hud-points-display {
     font-size: 0.85rem !important;
   }
+
+  /* Overlay de Selección de Equipo en Landscape */
+  .team-buttons-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2px !important;
+  }
+  .team-rescue-btn {
+    font-size: 0.55rem !important;
+    padding: 2px 1px !important;
+    border-width: 1.5px !important;
+  }
+  .cancel-rescue-btn {
+    width: 14px !important;
+    height: 14px !important;
+    font-size: 7px !important;
+  }
+}
+
+/* Estilos de Selección de Equipo (General) */
+.team-rescue-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 36, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 4px;
+  border-radius: 6px;
+  border: 2.5px solid var(--color-dark);
+}
+
+.team-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-height: 85%;
+  overflow-y: auto;
+}
+
+.team-rescue-btn {
+  border: 2px solid var(--color-dark);
+  border-radius: 6px;
+  color: white;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 4px 2px;
+  cursor: pointer;
+  box-shadow: 1px 1px 0px var(--color-dark);
+  text-shadow: 1px 1px 0px #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-rescue-btn:active {
+  transform: translate(0.5px, 0.5px);
+  box-shadow: 0px 0px 0px var(--color-dark);
+}
+
+.cancel-rescue-btn {
+  background: #EF4444;
+  color: white;
+  border: 1.5px solid var(--color-dark);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  cursor: pointer;
+  z-index: 102;
 }

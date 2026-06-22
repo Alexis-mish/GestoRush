@@ -30,6 +30,10 @@ function App() {
   };
   // Game Configuration States
   const [screen, setScreen] = useState<Screen>('title');
+  const [playedWordIds, setPlayedWordIds] = useState<string[]>([]);
+  const [gameMode, setGameMode] = useState<'classic' | 'all-vs-all'>('classic');
+  const [rescuingSlotIdx, setRescuingSlotIdx] = useState<number | null>(null);
+  const [cardSavedByTeam, setCardSavedByTeam] = useState<Record<string, string>>({});
   const [teams, setTeams] = useState<Team[]>([
     { id: '1', name: 'Equipo Rojo', score: 0, color: '#EF4444' },
     { id: '2', name: 'Equipo Azul', score: 0, color: '#3B82F6' },
@@ -277,7 +281,7 @@ function App() {
       };
     }
 
-    const randomWords = getRandomWords(1, difficulty);
+    const randomWords = getRandomWords(1, difficulty, playedWordIds);
     return randomWords[0];
   };
 
@@ -524,7 +528,7 @@ function App() {
   };
 
   // Grab/Save Card
-  const rescueCard = (slotIdx: number) => {
+  const rescueCard = (slotIdx: number, targetTeamId?: string) => {
     const card = slots[slotIdx];
     if (!card) return;
     if (cardStatus[card.id] !== 'active') return;
@@ -534,6 +538,13 @@ function App() {
       ...prev,
       [card.id]: 'saved'
     }));
+
+    if (gameMode === 'all-vs-all' && targetTeamId) {
+      setTeams(prev => prev.map(t => t.id === targetTeamId ? { ...t, score: t.score + card.points } : t));
+      setCardSavedByTeam(prev => ({ ...prev, [card.id]: targetTeamId }));
+    } else if (gameMode === 'classic') {
+      setTeams(prev => prev.map((t, idx) => idx === currentTeamIdx ? { ...t, score: t.score + card.points } : t));
+    }
 
     setTimeout(() => {
       checkAllCardsResolved();
@@ -563,18 +574,12 @@ function App() {
   const endTurn = (finalStatus: Record<string, 'active' | 'saved' | 'sunk'>, timeEnded: boolean = false) => {
     sound.playBGM();
 
-    let turnPoints = 0;
-    slots.forEach(card => {
+    const turnPoints = slots.reduce((acc, card) => {
       if (card && finalStatus[card.id] === 'saved') {
-        turnPoints += card.points;
+        return acc + card.points;
       }
-    });
-
-    setTeams(prev => {
-      const next = [...prev];
-      next[currentTeamIdx].score += turnPoints;
-      return next;
-    });
+      return acc;
+    }, 0);
 
     // Play fanfare if not timed-out buzzer
     if (!timeEnded) {
@@ -595,6 +600,8 @@ function App() {
     setChosenCards([]);
     setSelectedSlotIdx(null);
     setSelectedTrayCard(null);
+    setCardSavedByTeam({});
+    setRescuingSlotIdx(null);
     
     const nextTeamIdx = (currentTeamIdx + 1) % teams.length;
     
@@ -621,6 +628,9 @@ function App() {
     setChosenCards([]);
     setSelectedSlotIdx(null);
     setSelectedTrayCard(null);
+    setPlayedWordIds([]);
+    setCardSavedByTeam({});
+    setRescuingSlotIdx(null);
     sound.playBGM();
     setScreen('setup');
   };
@@ -762,6 +772,28 @@ function App() {
                     <option value={5}>5</option>
                     <option value={7}>7</option>
                   </select>
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+                  <label style={{ fontWeight: 700, fontSize: '0.85rem' }}>Modo de Juego:</label>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button 
+                      type="button"
+                      className={`cartoon-btn ${gameMode === 'classic' ? '' : 'disabled'}`}
+                      style={{ flex: 1, padding: '4px 6px', fontSize: '0.75rem', background: gameMode === 'classic' ? 'var(--accent-yellow)' : '#fff' }}
+                      onClick={() => { sound.playSave(); setGameMode('classic'); }}
+                    >
+                      👥 Tradicional
+                    </button>
+                    <button 
+                      type="button"
+                      className={`cartoon-btn ${gameMode === 'all-vs-all' ? '' : 'disabled'}`}
+                      style={{ flex: 1, padding: '4px 6px', fontSize: '0.75rem', background: gameMode === 'all-vs-all' ? 'var(--accent-yellow)' : '#fff' }}
+                      onClick={() => { sound.playSave(); setGameMode('all-vs-all'); }}
+                    >
+                      👑 Todos vs Todos
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -956,12 +988,15 @@ function App() {
             )}
           </div>
 
-          {/* Action button */}
           <button 
             className={`cartoon-btn ${chosenCards.length < 4 ? 'disabled' : ''}`}
             style={{ width: '100%', background: '#22C55E' }}
             disabled={chosenCards.length < 4}
-            onClick={() => { sound.playSave(); setScreen('preparation'); }}
+            onClick={() => {
+              sound.playSave();
+              setPlayedWordIds(prev => [...prev, ...chosenCards.map(c => c.id)]);
+              setScreen('preparation');
+            }}
           >
             Acomodar Tarjetas ➡️
           </button>
@@ -1191,7 +1226,14 @@ function App() {
                     <div key={card.id} className="claqueta-slot-target">
                       <div
                         className={cardClass}
-                        onClick={() => rescueCard(idx)}
+                        onClick={() => {
+                          if (status !== 'active') return;
+                          if (gameMode === 'all-vs-all') {
+                            setRescuingSlotIdx(idx);
+                          } else {
+                            rescueCard(idx);
+                          }
+                        }}
                       >
                         <div className="card-title-header"></div>
                         {revealToActor ? (
@@ -1201,6 +1243,29 @@ function App() {
                         )}
                         <span className="card-points">+{card.points} pts</span>
                       </div>
+                      
+                      {gameMode === 'all-vs-all' && status === 'active' && rescuingSlotIdx === idx && (
+                        <div className="team-rescue-overlay">
+                          <div className="team-buttons-grid">
+                            {teams.map(t => (
+                              <button 
+                                key={t.id} 
+                                className="team-rescue-btn" 
+                                style={{ backgroundColor: t.color }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  rescueCard(idx, t.id);
+                                  setRescuingSlotIdx(null);
+                                }}
+                                title={t.name}
+                              >
+                                {t.name.substring(0, 2).toUpperCase()}
+                              </button>
+                            ))}
+                          </div>
+                          <button className="cancel-rescue-btn" onClick={(e) => { e.stopPropagation(); setRescuingSlotIdx(null); }}>✕</button>
+                        </div>
+                      )}
                       
                       {/* Individual slot timer bar */}
                       {status === 'active' && (
@@ -1278,7 +1343,13 @@ function App() {
                   >
                     <span>R{idx + 1}: <strong>{card.word}</strong></span>
                     <span style={{ fontWeight: 'bold' }}>
-                      {isSaved ? `Salvada (+${card.points}) ✅` : 'Hundida (0) ❌'}
+                      {isSaved ? (
+                        gameMode === 'all-vs-all' ? (
+                          `Adivinada por ${teams.find(t => t.id === cardSavedByTeam[card.id])?.name || 'Equipo'} (+${card.points}) ✅`
+                        ) : (
+                          `Salvada (+${card.points}) ✅`
+                        )
+                      ) : 'Hundida (0) ❌'}
                     </span>
                   </div>
                 );
