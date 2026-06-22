@@ -50,11 +50,13 @@ const BlueMaskIcon = () => (
 );
 
 const WindowIcon = () => (
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="#FF8A00" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
-    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="#FF8A00" />
-    <line x1="9" y1="3" x2="9" y2="21" />
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+    <rect x="2" y="2" width="20" height="20" rx="3" ry="3" fill="#FF8A00" />
+    <line x1="2" y1="8" x2="22" y2="8" />
+    <rect x="5" y="11" width="14" height="8" fill="#FFFFFF" stroke="#000000" strokeWidth="2" rx="1" ry="1" />
   </svg>
 );
+
 
 const MiniClapperboard = () => (
   <div 
@@ -736,7 +738,26 @@ function App() {
           <button className="sound-toggle" onClick={toggleMuted} title={muted ? 'Activar sonido' : 'Silenciar'}>
             <SoundIcon muted={muted} />
           </button>
-          <div style={{ flex: 1 }}></div>
+          
+          <button 
+            className="fullscreen-btn" 
+            onClick={toggleFullscreen}
+            style={{
+              background: '#FFFFFF',
+              border: '3.5px solid #000000',
+              borderRadius: '20px',
+              padding: '4px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '2px 2px 0px #000000',
+              cursor: 'pointer'
+            }}
+          >
+            <WindowIcon />
+            <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#000000', fontFamily: 'Fredoka' }}>{isFullscreen ? 'Ventana' : 'Completa'}</span>
+          </button>
+          
           <button className="sound-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones">
             <QuestionIcon />
           </button>
@@ -814,7 +835,7 @@ function App() {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: 'none',
+              boxShadow: '2px 2px 0px #000000',
               cursor: 'pointer'
             }}
           >
