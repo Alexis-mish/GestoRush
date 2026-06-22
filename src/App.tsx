@@ -1785,7 +1785,7 @@ function App() {
 
           {/* Results summary (scrollable list of cards) */}
           <div 
-            className="cartoon-card" 
+            className="cartoon-card summary-results-card" 
             style={{ 
               flex: 1, 
               overflowY: 'auto', 
@@ -1836,11 +1836,12 @@ function App() {
           </div>
 
           {/* Team score cards with offset background shadows */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px', margin: '10px 0 20px 0' }}>
+          <div className="summary-teams-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px', margin: '10px 0 20px 0' }}>
             {teams.slice(0, 2).map(t => (
-              <div key={t.id} style={{ position: 'relative', height: '100px' }}>
+              <div key={t.id} className="summary-team-card-wrapper" style={{ position: 'relative', height: '100px' }}>
                 {/* Shadow card offset background */}
                 <div 
+                  className="summary-team-card-shadow"
                   style={{ 
                     position: 'absolute', 
                     top: '6px', 
@@ -1856,6 +1857,7 @@ function App() {
                 
                 {/* Main card foreground */}
                 <div 
+                  className="summary-team-card-foreground"
                   style={{ 
                     position: 'absolute', 
                     top: 0, 
