@@ -5,6 +5,90 @@ import { sound } from './utils/sound';
 
 type Screen = 'title' | 'setup' | 'turn-intro' | 'card-selection' | 'preparation' | 'action' | 'summary' | 'game-over';
 
+// Custom SVGs and icon components matching user designs
+const SoundIcon = ({ muted }: { muted: boolean }) => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill={muted ? "none" : "#3B82F6"} stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill={muted ? "none" : "#3B82F6"} />
+    {!muted && (
+      <>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      </>
+    )}
+    {muted && (
+      <>
+        <line x1="23" y1="9" x2="17" y2="15" />
+        <line x1="17" y1="9" x2="23" y2="15" />
+      </>
+    )}
+  </svg>
+);
+const QuestionIcon = () => (
+  <span style={{ color: '#E53B3B', fontSize: '1.6rem', fontWeight: 900, fontFamily: 'Fredoka', lineHeight: 1 }}>?</span>
+);
+
+const SettingsIcon = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 008 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+  </svg>
+);
+
+const SparkIcon = ({ style }: { style: React.CSSProperties }) => (
+  <svg viewBox="0 0 24 24" width="26" height="26" style={{ position: 'absolute', pointerEvents: 'none', filter: 'drop-shadow(2px 2px 0px #000)', ...style }}>
+    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9Z" fill="#E53B3B" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+  </svg>
+);
+
+const BlueMaskIcon = () => (
+  <svg viewBox="0 0 100 100" width="55" height="55" style={{ marginLeft: '8px', alignSelf: 'center', filter: 'drop-shadow(2px 2px 0px #000)', transform: 'rotate(5deg)' }}>
+    <path d="M10,40 C10,15 90,15 90,40 C90,75 70,90 50,90 C30,90 10,75 10,40 Z" fill="#459CFF" stroke="#000" strokeWidth="6" strokeLinejoin="round" />
+    <path d="M25,40 Q35,30 45,40" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" />
+    <path d="M55,40 Q65,30 75,40" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" />
+    <path d="M30,60 Q50,80 70,60 Q50,70 30,60" fill="#000" stroke="#000" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const WindowIcon = () => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="#FF8A00" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="#FF8A00" />
+    <line x1="9" y1="3" x2="9" y2="21" />
+  </svg>
+);
+
+const MiniClapperboard = () => (
+  <div 
+    style={{ 
+      position: 'absolute', 
+      top: '-15px', 
+      right: '10px', 
+      background: '#000000', 
+      color: '#FFFFFF', 
+      border: '3px solid #000000',
+      borderRadius: '8px',
+      padding: '4px 8px',
+      transform: 'rotate(10deg)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      zIndex: 10,
+      boxShadow: '2px 2px 0px rgba(0,0,0,0.15)',
+      boxSizing: 'border-box'
+    }}
+  >
+    {/* Diagonal stripes */}
+    <div style={{ 
+      width: '100%', 
+      height: '6px', 
+      background: 'repeating-linear-gradient(-45deg, #fff, #fff 4px, #000 4px, #000 8px)',
+      borderBottom: '2.5px solid #fff',
+      marginBottom: '2px'
+    }}></div>
+    <span style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2px', color: '#FFCC00', lineHeight: 1 }}>GESTOS</span>
+    <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.2px', color: '#FFFFFF', lineHeight: 1 }}>RUSH</span>
+  </div>
+);
+
 interface Team {
   id: string;
   name: string;
@@ -646,24 +730,27 @@ function App() {
 
   return (
     <div className="screen-body">
-      {/* Top HUD bar */}
-      <div className="top-bar">
-        <button className="sound-toggle" onClick={toggleMuted} title={muted ? 'Activar sonido' : 'Silenciar'}>
-          {muted ? '🔈' : '🔊'}
-        </button>
-        <button className="fullscreen-btn" onClick={toggleFullscreen}>
-          {isFullscreen ? '📴 Ventana' : '📺 Completa'}
-        </button>
-        <button className="sound-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones">
-          ❓
-        </button>
-      </div>
+      {/* Conditionally render header based on screen */}
+      {screen === 'title' && (
+        <div className="top-bar" style={{ padding: '4px 6px' }}>
+          <button className="sound-toggle" onClick={toggleMuted} title={muted ? 'Activar sonido' : 'Silenciar'}>
+            <SoundIcon muted={muted} />
+          </button>
+          <div style={{ flex: 1 }}></div>
+          <button className="sound-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones">
+            <QuestionIcon />
+          </button>
+        </div>
+      )}
 
       {/* A. TITLE SCREEN */}
       {screen === 'title' && (
-        <div className="screen-layout screen-pop-elastic" style={{ justifyContent: 'space-between', padding: '15px 0 5px 0' }}>
-          <div style={{ marginTop: '35px', width: '100%', flexShrink: 0 }}>
+        <div className="screen-layout screen-pop-elastic" style={{ justifyContent: 'space-between', padding: '10px 0 5px 0' }}>
+          <div style={{ marginTop: '20px', width: '100%', flexShrink: 0 }}>
             <div className="hanging-sign-container">
+              <div className="rope-nail"></div>
+              <div className="rope-diagonal left-diag"></div>
+              <div className="rope-diagonal right-diag"></div>
               <div className="rope left-rope"></div>
               <div className="rope right-rope"></div>
               <div className="wooden-board">
@@ -672,32 +759,35 @@ function App() {
                 <div className="hanger-hole left-hole"></div>
                 <div className="hanger-hole right-hole"></div>
                 
-                <span className="sign-icon left-icon">👋</span>
-                
                 <div className="sign-text-container">
                   <span className="sign-title-top">GESTO</span>
-                  <span className="sign-title-bottom">RUSH</span>
+                  <div className="sign-title-bottom-row">
+                    <span className="sign-title-bottom">RUSH</span>
+                    <BlueMaskIcon />
+                  </div>
                 </div>
                 
-                <span className="sign-icon right-icon">🎭</span>
-                
-                <span className="sign-star star-1">★</span>
-                <span className="sign-star star-2">★</span>
-                <span className="sign-star star-3">★</span>
-                <span className="sign-star star-4">★</span>
+                <SparkIcon style={{ top: '-10px', left: '15%', transform: 'rotate(-15deg)' }} />
+                <SparkIcon style={{ top: '35px', left: '8%', transform: 'rotate(20deg) scale(0.8)' }} />
+                <SparkIcon style={{ top: '10px', right: '12%', transform: 'rotate(15deg)' }} />
+                <SparkIcon style={{ bottom: '20px', right: '15%', transform: 'rotate(-10deg) scale(0.9)' }} />
               </div>
             </div>
           </div>
-
-          <div className="cartoon-card" style={{ padding: '12px', textAlign: 'center', margin: '15px 0' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.95rem', color: '#6b6375', margin: 0 }}>
-              El clásico juego de mímica a toda velocidad. ¡Elige tus cartas, ordénalas en la claqueta y adivina antes de que sea tarde!
-            </p>
-          </div>
           
+          <div style={{ flex: 1 }}></div>
+
           <button 
             className="cartoon-btn" 
-            style={{ padding: '14px', fontSize: '1.5rem', background: 'var(--accent-yellow)', width: '100%' }}
+            style={{ 
+              padding: '16px 20px', 
+              fontSize: '1.8rem', 
+              background: 'var(--accent-yellow)', 
+              width: '100%',
+              borderWidth: '5px',
+              borderRadius: '16px',
+              boxShadow: '0 6px 0px #000'
+            }}
             onClick={startSetup}
           >
             ¡JUGAR! 🚀
@@ -705,23 +795,89 @@ function App() {
         </div>
       )}
 
+      {/* Header for Setup screen */}
+      {screen === 'setup' && (
+        <div className="top-bar" style={{ padding: '4px 6px' }}>
+          <button className="sound-toggle" onClick={toggleMuted} title={muted ? 'Activar sonido' : 'Silenciar'}>
+            <SoundIcon muted={muted} />
+          </button>
+          
+          {/* Top-center Ventana capsule */}
+          <button 
+            className="fullscreen-btn" 
+            onClick={toggleFullscreen}
+            style={{
+              background: '#FFFFFF',
+              border: '3.5px solid #000000',
+              borderRadius: '20px',
+              padding: '4px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <WindowIcon />
+            <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#000000', fontFamily: 'Fredoka' }}>{isFullscreen ? 'Ventana' : 'Completa'}</span>
+          </button>
+          
+          <button className="sound-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones">
+            <QuestionIcon />
+          </button>
+        </div>
+      )}
+
       {/* B. SETUP SCREEN */}
       {screen === 'setup' && (
-        <div className="screen-layout screen-pop-elastic setup-screen-layout">
-          <div className="cartoon-card" style={{ textAlign: 'center', padding: '10px', marginBottom: '8px' }}>
-            <h2 style={{ fontSize: '1.3rem', margin: 0 }}>Configurar Partida ⚙️</h2>
+        <div className="screen-layout screen-pop-elastic setup-screen-layout" style={{ justifyContent: 'space-between', paddingBottom: '5px' }}>
+          {/* Header capsule */}
+          <div 
+            style={{ 
+              background: '#FFFFFF', 
+              border: '4.5px solid #000000', 
+              borderRadius: '25px', 
+              textAlign: 'center', 
+              padding: '6px 16px', 
+              marginBottom: '12px',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}
+          >
+            <h2 style={{ fontSize: '1.4rem', margin: 0, fontWeight: 900, letterSpacing: '-0.5px' }}>Configurar Partida</h2>
           </div>
 
-          <div className="cartoon-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, padding: '10px 14px', marginBottom: '8px' }}>
-            <div className="setup-grid-layout">
-              {/* Left Column */}
-              <div className="setup-column-left">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <h3 style={{ fontSize: '1rem', margin: 0 }}>Equipos</h3>
+          {/* Main config card */}
+          <div 
+            className="cartoon-card" 
+            style={{ 
+              flex: 1, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              minHeight: 0, 
+              padding: '14px 18px', 
+              marginBottom: '12px',
+              borderWidth: '5px',
+              borderColor: '#000000',
+              boxShadow: 'none',
+              borderRadius: '24px'
+            }}
+          >
+            <div className="setup-grid-layout" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {/* Left Column (Teams and Rounds) */}
+              <div className="setup-column-left" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 900 }}>Equipos</h3>
                   {teams.length < 8 && (
                     <button 
                       className="cartoon-btn" 
-                      style={{ padding: '3px 8px', fontSize: '0.75rem', background: 'var(--card-easy)' }}
+                      style={{ 
+                        padding: '4px 10px', 
+                        fontSize: '0.8rem', 
+                        background: 'var(--card-easy)', 
+                        borderWidth: '3px',
+                        boxShadow: '2px 2px 0px #000'
+                      }}
                       onClick={addTeam}
                     >
                       + Añadir
@@ -729,10 +885,21 @@ function App() {
                   )}
                 </div>
                 
-                <div className="setup-teams-list">
+                <div className="setup-teams-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {teams.map((team, idx) => (
-                    <div key={team.id} style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                      <span style={{ display: 'inline-block', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: team.color, border: '2px solid #111', flexShrink: 0 }}></span>
+                    <div key={team.id} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      {/* Solid color circle dot */}
+                      <span 
+                        style={{ 
+                          display: 'inline-block', 
+                          width: '18px', 
+                          height: '18px', 
+                          borderRadius: '50%', 
+                          backgroundColor: team.color, 
+                          border: '3.5px solid #000000', 
+                          flexShrink: 0 
+                        }}
+                      ></span>
                       <input
                         type="text"
                         className="cartoon-input"
@@ -744,12 +911,28 @@ function App() {
                           return n;
                         })}
                         placeholder={`Nombre del Equipo ${idx + 1}`}
-                        style={{ flex: 1, padding: '4px 8px', fontSize: '0.85rem' }}
+                        style={{ 
+                          flex: 1, 
+                          padding: '6px 12px', 
+                          fontSize: '0.9rem', 
+                          borderWidth: '3.5px',
+                          borderRadius: '16px',
+                          fontWeight: 900
+                        }}
                       />
                       {teams.length > 2 && (
                         <button
                           className="cartoon-btn"
-                          style={{ padding: '4px 8px', fontSize: '0.75rem', background: '#EF4444', color: 'white', border: '2px solid #111', borderRadius: '6px', flexShrink: 0 }}
+                          style={{ 
+                            padding: '6px 10px', 
+                            fontSize: '0.8rem', 
+                            background: '#EF4444', 
+                            color: 'white', 
+                            borderWidth: '3px', 
+                            borderRadius: '12px', 
+                            flexShrink: 0,
+                            boxShadow: '2px 2px 0px #000'
+                          }}
                           onClick={() => removeTeam(team.id)}
                         >
                           🗑️
@@ -759,85 +942,160 @@ function App() {
                   ))}
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-                  <label style={{ fontWeight: 700, fontSize: '0.85rem' }}>Rondas:</label>
-                  <select 
-                    className="cartoon-input" 
-                    value={rounds} 
-                    onChange={(e) => setRounds(Number(e.target.value))}
-                    style={{ width: '65px', padding: '2px 4px', fontSize: '0.85rem' }}
-                  >
-                    <option value={3}>3</option>
-                    <option value={4}/><option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={7}>7</option>
-                  </select>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
+                  <label style={{ fontWeight: 900, fontSize: '0.95rem' }}>Rondas:</label>
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <select 
+                      className="cartoon-input" 
+                      value={rounds} 
+                      onChange={(e) => setRounds(Number(e.target.value))}
+                      style={{ 
+                        width: '75px', 
+                        padding: '4px 24px 4px 10px', 
+                        fontSize: '0.9rem', 
+                        borderWidth: '3.5px',
+                        borderRadius: '14px',
+                        fontWeight: 900,
+                        appearance: 'none'
+                      }}
+                    >
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5</option>
+                      <option value={7}>7</option>
+                    </select>
+                    {/* Downward Chevron indicator */}
+                    <span style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', fontWeight: 900, fontSize: '0.8rem' }}>▼</span>
+                  </div>
                 </div>
                 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
-                  <label style={{ fontWeight: 700, fontSize: '0.85rem' }}>Modo de Juego:</label>
-                  <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
+                  <label style={{ fontWeight: 900, fontSize: '0.95rem' }}>Modo de Juego:</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
                     <button 
                       type="button"
-                      className={`cartoon-btn ${gameMode === 'classic' ? '' : 'disabled'}`}
-                      style={{ flex: 1, padding: '4px 6px', fontSize: '0.75rem', background: gameMode === 'classic' ? 'var(--accent-yellow)' : '#fff' }}
+                      className={`cartoon-btn`}
+                      style={{ 
+                        flex: 1, 
+                        padding: '8px 12px', 
+                        fontSize: '0.85rem', 
+                        background: gameMode === 'classic' ? 'var(--accent-yellow)' : '#FFFFFF',
+                        borderColor: gameMode === 'classic' ? '#000000' : '#888888',
+                        color: gameMode === 'classic' ? '#000000' : '#666666',
+                        borderWidth: '3.5px',
+                        boxShadow: gameMode === 'classic' ? '0px 3px 0px #000000' : '0px 3px 0px #888888',
+                        borderRadius: '14px'
+                      }}
                       onClick={() => { sound.playSave(); setGameMode('classic'); }}
                     >
-                      👥 Tradicional
+                      <span style={{ marginRight: '4px' }}>👥</span> Tradicional
                     </button>
                     <button 
                       type="button"
-                      className={`cartoon-btn ${gameMode === 'all-vs-all' ? '' : 'disabled'}`}
-                      style={{ flex: 1, padding: '4px 6px', fontSize: '0.75rem', background: gameMode === 'all-vs-all' ? 'var(--accent-yellow)' : '#fff' }}
+                      className={`cartoon-btn`}
+                      style={{ 
+                        flex: 1, 
+                        padding: '8px 12px', 
+                        fontSize: '0.85rem', 
+                        background: gameMode === 'all-vs-all' ? 'var(--accent-yellow)' : '#FFFFFF',
+                        borderColor: gameMode === 'all-vs-all' ? '#000000' : '#888888',
+                        color: gameMode === 'all-vs-all' ? '#000000' : '#666666',
+                        borderWidth: '3.5px',
+                        boxShadow: gameMode === 'all-vs-all' ? '0px 3px 0px #000000' : '0px 3px 0px #888888',
+                        borderRadius: '14px'
+                      }}
                       onClick={() => { sound.playSave(); setGameMode('all-vs-all'); }}
                     >
-                      👑 Todos vs Todos
+                      <span style={{ marginRight: '4px' }}>👑</span> Todos vs Todos
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column */}
-              <div className="setup-column-right">
-                <h3 style={{ fontSize: '1rem', margin: '0 0 4px 0' }}>📝 Palabras Custom</h3>
-                <div style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
+              {/* Right Column (Custom Words) */}
+              <div className="setup-column-right" style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '2px dashed #000000', paddingTop: '10px' }}>
+                <h3 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 900 }}>📝 Palabras Custom</h3>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <input
                     type="text"
                     className="cartoon-input"
                     value={customWordsInput}
                     onChange={(e) => setCustomWordsInput(e.target.value)}
                     placeholder="ej: Batman, Comer limón"
-                    style={{ padding: '4px 8px', fontSize: '0.8rem' }}
+                    style={{ 
+                      padding: '6px 12px', 
+                      fontSize: '0.85rem',
+                      borderWidth: '3.5px',
+                      borderRadius: '16px',
+                      fontWeight: 900
+                    }}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddCustomWords()}
                   />
-                  <button className="cartoon-btn" style={{ padding: '4px 10px', fontSize: '0.8rem' }} onClick={handleAddCustomWords}>Añadir</button>
+                  <button 
+                    className="cartoon-btn" 
+                    style={{ 
+                      padding: '8px 16px', 
+                      fontSize: '0.85rem', 
+                      background: 'var(--accent-yellow)',
+                      borderWidth: '3.5px',
+                      borderRadius: '14px',
+                      boxShadow: '0 3px 0px #000'
+                    }} 
+                    onClick={handleAddCustomWords}
+                  >
+                    Añadir
+                  </button>
                 </div>
                 
-                <div className="setup-custom-words-bag">
+                <div className="setup-custom-words-bag" style={{ minHeight: '30px', maxHeight: '80px', overflowY: 'auto' }}>
                   {customWordPool.length > 0 ? (
-                    customWordPool.map((word, idx) => (
-                      <span 
-                        key={idx} 
-                        style={{ fontSize: '0.7rem', background: '#fff', border: '1.5px solid #111', padding: '1px 5px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '2px' }}
-                      >
-                        {word}
-                        <button 
-                          style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', color: 'red', padding: 0 }}
-                          onClick={() => setCustomWordPool(prev => prev.filter((_, i) => i !== idx))}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                      {customWordPool.map((word, idx) => (
+                        <span 
+                          key={idx} 
+                          style={{ 
+                            fontSize: '0.75rem', 
+                            background: '#FFFFFF', 
+                            border: '2px solid #000000', 
+                            padding: '2px 8px', 
+                            borderRadius: '10px', 
+                            display: 'inline-flex', 
+                            alignItems: 'center', 
+                            gap: '4px',
+                            fontWeight: 900
+                          }}
                         >
-                          ×
-                        </button>
-                      </span>
-                    ))
+                          {word}
+                          <button 
+                            style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', color: 'red', padding: 0, fontSize: '0.85rem' }}
+                            onClick={() => setCustomWordPool(prev => prev.filter((_, i) => i !== idx))}
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
                   ) : (
-                    <span style={{ fontSize: '0.75rem', opacity: 0.5, fontStyle: 'italic', padding: '4px' }}>Ninguna palabra añadida</span>
+                    <span style={{ fontSize: '0.85rem', opacity: 0.5, fontStyle: 'italic', paddingLeft: '4px' }}>Ninguna palabra añadida</span>
                   )}
                 </div>
               </div>
             </div>
           </div>
 
-          <button className="cartoon-btn" style={{ width: '100%', marginTop: '4px' }} onClick={() => { sound.playSave(); setScreen('turn-intro'); }}>
+          <button 
+            className="cartoon-btn" 
+            style={{ 
+              width: '100%', 
+              padding: '14px 20px', 
+              fontSize: '1.5rem', 
+              background: 'var(--accent-yellow)',
+              borderWidth: '5px',
+              borderRadius: '16px',
+              boxShadow: '0 6px 0px #000'
+            }} 
+            onClick={() => { sound.playSave(); setScreen('turn-intro'); }}
+          >
             Continuar ➡️
           </button>
         </div>
@@ -870,41 +1128,49 @@ function App() {
         </div>
       )}
 
+      {/* Header for Card Selection screen */}
+      {screen === 'card-selection' && (
+        <div className="top-bar" style={{ padding: '4px 6px' }}>
+          <button className="sound-toggle" onClick={resetGame} title="Ajustes / Reiniciar">
+            <SettingsIcon />
+          </button>
+          
+          {/* Top-center Gesto Rush Title Logo */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none', transform: 'rotate(-2deg)' }}>
+            <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#FFFFFF', WebkitTextStroke: '1.5px #000', textShadow: '1.5px 1.5px 0 #000', lineHeight: 0.8 }}>Gestos</span>
+            <span style={{ fontSize: '1.8rem', fontWeight: 900, color: '#459CFF', WebkitTextStroke: '1.5px #000', textShadow: '1.5px 1.5px 0 #000', lineHeight: 0.8 }}>Rush</span>
+          </div>
+          
+          <button className="sound-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones">
+            <QuestionIcon />
+          </button>
+        </div>
+      )}
+
       {/* D1. CARD SELECTION SCREEN */}
       {screen === 'card-selection' && (
-        <div className="screen-layout screen-slide-bottom card-selection-screen-layout">
-          <div className="cartoon-card" style={{ padding: '8px 12px', marginBottom: '8px', textAlign: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: '1.05rem' }}>🃏 {actorName}, Elige tus 4 cartas</h3>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#555' }}>
-              Toca los mazos de abajo. Las cartas que te salgan son las que jugarás (¡no se pueden cambiar!).
-            </p>
-          </div>
-
-          {/* Chosen Cards Display Tray */}
-          <div className="cartoon-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0 }}>
-            <h4 style={{ textAlign: 'center', fontSize: '0.95rem', margin: '0 0 10px 0' }}>
-              Elegidas: {chosenCards.length}/4
-            </h4>
-            <div className="chosen-cards-grid">
+        <div className="screen-layout screen-slide-bottom card-selection-screen-layout" style={{ justifyContent: 'space-between', paddingBottom: '5px' }}>
+          {/* Slots display */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0, margin: '10px 0' }}>
+            <div className="chosen-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', width: '100%' }}>
               {[0, 1, 2, 3].map((idx) => {
                 const card = chosenCards[idx];
                 return (
                   <div 
                     key={idx}
                     style={{
-                      height: '90px',
-                      border: '3px solid var(--color-dark)',
-                      borderRadius: '12px',
-                      background: card ? (card.difficulty === 'Fácil' ? 'var(--card-easy)' : card.difficulty === 'Medio' ? 'var(--card-medium)' : 'var(--card-hard)') : 'rgba(0,0,0,0.05)',
+                      height: '110px',
+                      border: card ? '3.5px solid #000000' : '3px dashed #B0B0B0',
+                      borderRadius: '16px',
+                      background: card ? (card.difficulty === 'Fácil' ? 'var(--card-easy)' : card.difficulty === 'Medio' ? 'var(--card-medium)' : 'var(--card-hard)') : '#EAEAE6',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: card ? 'white' : 'var(--color-dark)',
-                      padding: '6px',
+                      color: '#000000',
+                      padding: '8px 4px',
                       textAlign: 'center',
-                      boxShadow: card ? '2px 2px 0 var(--color-dark)' : 'none',
-                      borderStyle: card ? 'solid' : 'dashed',
+                      boxShadow: card ? '0px 4px 0px #000000' : 'none',
                       boxSizing: 'border-box',
                       width: '100%',
                       position: 'relative',
@@ -913,35 +1179,40 @@ function App() {
                   >
                     {card ? (
                       <>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', background: '#fff', color: '#111', padding: '1px 4px', borderRadius: '4px', border: '1px solid #111', marginBottom: '4px' }}>
-                          {card.difficulty}
-                        </span>
+                        <div style={{ 
+                          width: '100%', 
+                          height: '10px', 
+                          background: 'repeating-linear-gradient(-45deg, #fff, #fff 4px, #000 4px, #000 8px)',
+                          borderBottom: '2px solid #000',
+                          marginBottom: '4px'
+                        }}></div>
                         <span style={{ 
                           fontSize: getCardFontSize(card.word, true), 
-                          fontWeight: 'bold', 
-                          color: '#111', 
-                          background: '#fff', 
-                          border: '1.5px solid #111', 
-                          borderRadius: '6px', 
-                          padding: '4px', 
+                          fontWeight: 900, 
+                          color: '#000000', 
+                          background: '#FFFFFF', 
+                          border: '2px solid #000000', 
+                          borderRadius: '8px', 
+                          padding: '4px 2px', 
                           width: '100%', 
                           boxSizing: 'border-box',
-                          lineHeight: '1.15',
+                          lineHeight: '1.1',
                           wordBreak: 'break-word',
-                          overflowWrap: 'break-word',
-                          whiteSpace: 'normal',
-                          maxHeight: '52px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          textAlign: 'center',
                           flexGrow: 1
                         }}>
                           {card.word}
                         </span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#FFFFFF', textShadow: '1px 1px 0px #000', marginTop: '2px' }}>
+                          +{card.points} pts
+                        </span>
                       </>
                     ) : (
-                      <span style={{ fontSize: '0.8rem', opacity: 0.5, fontStyle: 'italic' }}>Ranura {idx + 1}</span>
+                      <span style={{ fontSize: '0.85rem', opacity: 0.6, fontWeight: 900, color: '#666666', lineHeight: '1.2' }}>
+                        Ranura {idx + 1}<br/>(Vacía)
+                      </span>
                     )}
                   </div>
                 );
@@ -950,47 +1221,99 @@ function App() {
           </div>
 
           {/* 3 Decks (Mazos) to click and draw from */}
-          <div className="decks-container" style={{ pointerEvents: chosenCards.length >= 4 ? 'none' : 'auto', opacity: chosenCards.length >= 4 ? 0.6 : 1 }}>
+          <div 
+            className="decks-container" 
+            style={{ 
+              pointerEvents: chosenCards.length >= 4 ? 'none' : 'auto', 
+              opacity: chosenCards.length >= 4 ? 0.6 : 1,
+              display: 'flex',
+              gap: '10px',
+              padding: '10px',
+              background: 'none',
+              border: 'none',
+              marginBottom: '10px'
+            }}
+          >
+            {/* EASY DECK */}
             <div 
-              className="deck-pile Fácil"
+              className="deck-pile"
+              style={{
+                background: 'var(--card-easy)',
+                border: '4px solid #000000',
+                borderRadius: '16px',
+                boxShadow: '0 5px 0px #000000',
+                height: '110px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
               onClick={() => selectCardFromDeck('Fácil')}
             >
-              <p className="deck-title">Fácil</p>
-              <span className="deck-subtitle">1 punto</span>
+              <span style={{ fontSize: '1.8rem', marginBottom: '2px' }}>👍</span>
+              <p style={{ margin: 0, color: '#FFFFFF', fontWeight: 900, fontSize: '1.1rem', textShadow: '1.5px 1.5px 0 #000' }}>FÁCIL</p>
+              <span style={{ color: '#FFFFFF', fontSize: '0.8rem', fontWeight: 900, textShadow: '1px 1px 0 #000' }}>(1 punto)</span>
             </div>
             
+            {/* MEDIUM DECK */}
             <div 
-              className="deck-pile Medio"
+              className="deck-pile"
+              style={{
+                background: 'var(--card-medium)',
+                border: '4px solid #000000',
+                borderRadius: '16px',
+                boxShadow: '0 5px 0px #000000',
+                height: '110px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
               onClick={() => selectCardFromDeck('Medio')}
             >
-              <p className="deck-title">Medio</p>
-              <span className="deck-subtitle">2 puntos</span>
+              <span style={{ fontSize: '1.8rem', marginBottom: '2px' }}>💪</span>
+              <p style={{ margin: 0, color: '#FFFFFF', fontWeight: 900, fontSize: '1.1rem', textShadow: '1.5px 1.5px 0 #000' }}>MEDIO</p>
+              <span style={{ color: '#FFFFFF', fontSize: '0.8rem', fontWeight: 900, textShadow: '1px 1px 0 #000' }}>(2 puntos)</span>
             </div>
 
+            {/* HARD DECK */}
             <div 
-              className="deck-pile Difícil"
+              className="deck-pile"
+              style={{
+                background: 'var(--card-hard)',
+                border: '4px solid #000000',
+                borderRadius: '16px',
+                boxShadow: '0 5px 0px #000000',
+                height: '110px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
               onClick={() => selectCardFromDeck('Difícil')}
             >
-              <p className="deck-title">Difícil</p>
-              <span className="deck-subtitle">3 puntos</span>
+              <span style={{ fontSize: '1.8rem', marginBottom: '2px' }}>🎭</span>
+              <p style={{ margin: 0, color: '#FFFFFF', fontWeight: 900, fontSize: '1.1rem', textShadow: '1.5px 1.5px 0 #000' }}>DIFÍCIL</p>
+              <span style={{ color: '#FFFFFF', fontSize: '0.8rem', fontWeight: 900, textShadow: '1px 1px 0 #000' }}>(3 puntos)</span>
             </div>
-
-            {/* Custom Deck if custom words pool is not empty */}
-            {customWordPool.length > 0 && (
-              <div 
-                className="deck-pile"
-                style={{ backgroundColor: 'var(--accent-purple)' }}
-                onClick={() => selectCardFromDeck('Personalizada')}
-              >
-                <p className="deck-title" style={{ fontSize: '0.8rem' }}>Custom</p>
-                <span className="deck-subtitle">2 puntos</span>
-              </div>
-            )}
           </div>
 
           <button 
             className={`cartoon-btn ${chosenCards.length < 4 ? 'disabled' : ''}`}
-            style={{ width: '100%', background: '#22C55E' }}
+            style={{ 
+              width: '100%', 
+              background: '#4BB75C',
+              borderWidth: '5px',
+              borderRadius: '16px',
+              boxShadow: '0 6px 0px #000',
+              padding: '14px 20px',
+              fontSize: '1.5rem',
+              color: '#FFFFFF',
+              textShadow: '2px 2px 0px #000'
+            }}
             disabled={chosenCards.length < 4}
             onClick={() => {
               sound.playSave();
@@ -1182,25 +1505,45 @@ function App() {
 
       {/* E. ACTIVE GAME SCREEN */}
       {screen === 'action' && (
-        <div className="screen-layout screen-pop-elastic action-screen-layout">
-          {/* Header & Mask Toggle */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
-            <div className="cartoon-card" style={{ padding: '6px 12px', margin: 0, background: activeTeam.color, flex: 1 }}>
-              <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>Mímica: {actorName}</span>
-            </div>
-            
-            <button 
-              className="cartoon-btn" 
-              style={{ padding: '6px 10px', fontSize: '0.8rem', marginLeft: '8px' }}
-              onClick={() => setRevealToActor(!revealToActor)}
-            >
-              {revealToActor ? '🙈 Ocultar a Equipo' : '👁️ Mostrar Cartas'}
-            </button>
+        <div 
+          className="screen-layout screen-pop-elastic action-screen-layout"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 100,
+            background: '#FAF6EE',
+            backgroundImage: 'radial-gradient(#D3D3D3 10%, transparent 10%)',
+            backgroundSize: '16px 16px',
+            padding: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxSizing: 'border-box'
+          }}
+        >
+          {/* Red header bar spanning entire width */}
+          <div 
+            style={{ 
+              background: '#E53B3B', 
+              color: '#FFFFFF', 
+              textAlign: 'center', 
+              padding: '10px', 
+              margin: '-12px -12px 10px -12px',
+              borderBottom: '4px solid #000000',
+              fontWeight: 900,
+              fontSize: '1.25rem',
+              letterSpacing: '0.5px'
+            }}
+          >
+            Mímica: {actorName}
           </div>
 
           {/* Action Claqueta */}
-          <div className="claqueta-container">
-            <div className="claqueta-board">
+          <div className="claqueta-container" style={{ flex: 1, margin: '10px 0' }}>
+            <div className="claqueta-board" style={{ maxWidth: '420px', height: '260px' }}>
               <div className={`claqueta-arm-hinge ${claquetaOpen ? 'open' : 'snapped'}`}>
                 <div className="claqueta-arm-stripes"></div>
               </div>
@@ -1214,7 +1557,6 @@ function App() {
                   let cardClass = 'card-standing';
                   if (status === 'saved') cardClass += ' saved';
                   if (status === 'sunk') cardClass += ' sunk';
-                  if (card.difficulty) cardClass += ` ${card.difficulty}`;
 
                   // Timer calculations for this slot
                   const limit = 15 * (idx + 1);
@@ -1223,9 +1565,21 @@ function App() {
                   const percentage = status === 'active' ? (timeLeftForSlot / 15) * 100 : 0;
 
                   return (
-                    <div key={card.id} className="claqueta-slot-target">
+                    <div key={card.id} className="claqueta-slot-target" style={{ overflow: 'visible' }}>
                       <div
                         className={cardClass}
+                        style={{
+                          backgroundColor: '#FFFFFF',
+                          color: '#000000',
+                          border: '3.5px solid #000000',
+                          boxShadow: '0 -4px 0px #000000',
+                          cursor: status === 'active' ? 'pointer' : 'default',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          padding: '6px 4px',
+                          borderRadius: '12px'
+                        }}
                         onClick={() => {
                           if (status !== 'active') return;
                           if (gameMode === 'all-vs-all') {
@@ -1235,13 +1589,36 @@ function App() {
                           }
                         }}
                       >
-                        <div className="card-title-header"></div>
+                        {/* Film clapper stripe on top of card */}
+                        <div style={{ 
+                          width: '100%', 
+                          height: '8px', 
+                          background: 'repeating-linear-gradient(-45deg, #fff, #fff 4px, #000 4px, #000 8px)',
+                          borderBottom: '2.5px solid #000',
+                          marginBottom: '4px'
+                        }}></div>
+
                         {revealToActor ? (
-                           <span className="card-word" style={{ fontSize: getCardFontSize(card.word) }}>{card.word}</span>
+                          <span 
+                            style={{ 
+                              fontSize: getCardFontSize(card.word, true), 
+                              fontWeight: 900, 
+                              color: '#000000',
+                              lineHeight: '1.1',
+                              flexGrow: 1,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              wordBreak: 'break-word',
+                              padding: '2px'
+                            }}
+                          >
+                            {card.word}
+                          </span>
                         ) : (
-                          <span className="card-word" style={{ fontSize: '2.5rem' }}>❓</span>
+                          <span style={{ fontSize: '2rem', flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>❓</span>
                         )}
-                        <span className="card-points">+{card.points} pts</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#000000', marginTop: '2px' }}>+{card.points} pts</span>
                       </div>
                       
                       {gameMode === 'all-vs-all' && status === 'active' && rescuingSlotIdx === idx && (
@@ -1273,7 +1650,7 @@ function App() {
                           className="slot-timer-bar" 
                           style={{ 
                             width: `${percentage}%`,
-                            backgroundColor: percentage < 30 ? 'var(--card-hard)' : 'var(--card-easy)' 
+                            backgroundColor: percentage < 30 ? '#E53B3B' : '#4BB75C' 
                           }}
                         ></div>
                       )}
@@ -1282,48 +1659,124 @@ function App() {
                 })}
               </div>
 
-              {/* Blue front plate of clapper box */}
-              <div className="claqueta-front-box">
-                <h2 className="claqueta-title-text" style={{ fontSize: '2.5rem' }}>Gesto Rush</h2>
+              {/* Black clapperboard box front plate */}
+              <div className="claqueta-front-box" style={{ background: '#000000', border: '5px solid #000000', borderRadius: '0 0 20px 20px', boxShadow: 'none' }}>
+                {/* No text inside clapper box to follow user design */}
               </div>
             </div>
           </div>
 
-          {/* Master HUD & Alarm */}
-          <div className="claqueta-hud">
-            <span className={`hud-timer-display ${turnTimeLeft <= 10 ? 'warning' : ''}`}>🕒 {turnTimeLeft}s</span>
-            <span className="hud-points-display" style={{ color: 'var(--card-easy)' }}>
+          {/* Bottom control bar styled exactly like Image 4 */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              background: '#1A1A1A', 
+              borderRadius: '35px', 
+              padding: '8px 16px',
+              border: '4px solid #000000',
+              boxSizing: 'border-box',
+              width: '100%',
+              marginBottom: '10px'
+            }}
+          >
+            {/* Left: timer inside white circle */}
+            <div 
+              style={{ 
+                background: '#FFFFFF', 
+                borderRadius: '50%', 
+                width: '50px', 
+                height: '50px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                border: '3.5px solid #000000',
+                fontWeight: 900,
+                fontSize: '1.25rem',
+                color: '#000000',
+                flexShrink: 0
+              }}
+            >
+              {turnTimeLeft}s
+            </div>
+            
+            {/* Center status */}
+            <span style={{ color: '#FFFFFF', fontWeight: 900, fontSize: '1.15rem' }}>
               Salvadas: {slots.filter(c => c && cardStatus[c.id] === 'saved').length}/4
             </span>
+            
+            {/* Right Terminar button */}
+            <button 
+              className="cartoon-btn" 
+              style={{ 
+                background: '#E53B3B', 
+                color: '#FFFFFF', 
+                padding: '6px 14px', 
+                fontSize: '0.85rem', 
+                borderWidth: '3.5px',
+                borderRadius: '20px',
+                boxShadow: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                margin: 0
+              }}
+              onClick={() => endTurn(cardStatus, false)}
+            >
+              <span>Terminar Turno</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
           </div>
-
-          <div className="cartoon-card" style={{ padding: '8px 12px', textAlign: 'center', marginTop: '8px', marginBottom: '8px' }}>
-            <p style={{ fontSize: '0.8rem', margin: 0, fontWeight: 600 }}>
-              {revealToActor ? '👇 Haz clic en la carta cuando tu equipo la adivine para salvarla' : '⚠️ Gira la pantalla hacia el actor para ver las palabras'}
-            </p>
-          </div>
-
-          <button className="cartoon-btn" style={{ background: '#EF4444', padding: '10px' }} onClick={() => endTurn(cardStatus, false)}>
-            Terminar Turno Prontamente 🛑
-          </button>
         </div>
       )}
 
       {/* F. TURN SUMMARY SCREEN */}
+      {/* F. TURN SUMMARY SCREEN */}
       {screen === 'summary' && (
-        <div className="screen-layout screen-pop-elastic">
-          <div className="cartoon-card" style={{ textAlign: 'center', margin: '8px 0' }}>
-            <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Turno de {activeTeam.name} 🎬</h2>
-            <h1 style={{ fontSize: '3rem', margin: '4px 0', color: turnPointsEarned > 0 ? 'var(--card-easy)' : 'var(--card-hard)' }}>
+        <div className="screen-layout screen-pop-elastic" style={{ justifyContent: 'space-between', paddingBottom: '5px' }}>
+          {/* Header block with massive score text */}
+          <div style={{ textAlign: 'center', margin: '20px 0 10px 0', position: 'relative' }}>
+            <h1 
+              style={{ 
+                fontSize: '4.5rem', 
+                margin: 0, 
+                color: '#E53B3B', 
+                WebkitTextStroke: '3px #000000',
+                textShadow: '0 8px 0px rgba(0,0,0,0.15)',
+                fontWeight: 900,
+                lineHeight: 1
+              }}
+            >
               +{turnPointsEarned} pts
             </h1>
-            <p style={{ fontWeight: 600, fontSize: '0.9rem', margin: 0 }}>¡Buen esfuerzo de {actorName}!</p>
+            <p style={{ fontWeight: 900, fontSize: '1.25rem', color: '#000000', margin: '6px 0 0 0' }}>
+              ¡Buen esfuerzo de {actorName}!
+            </p>
+            
+            {/* Top-right mini clapperboard graphic */}
+            <MiniClapperboard />
           </div>
 
-          {/* Slots results summary */}
-          <div className="cartoon-card" style={{ flex: 1, overflowY: 'auto', margin: '4px 0', padding: '10px' }}>
-            <h4 style={{ margin: '0 0 6px 0', fontSize: '0.95rem' }}>Resultados:</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {/* Results summary (scrollable list of cards) */}
+          <div 
+            className="cartoon-card" 
+            style={{ 
+              flex: 1, 
+              overflowY: 'auto', 
+              margin: '10px 0', 
+              padding: '12px',
+              borderWidth: '4px',
+              borderRadius: '20px',
+              boxShadow: 'none'
+            }}
+          >
+            <h4 style={{ margin: '0 0 8px 0', fontSize: '1.05rem', fontWeight: 900 }}>Resultados:</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {slots.map((card, idx) => {
                 if (!card) return null;
                 const status = cardStatus[card.id];
@@ -1334,22 +1787,26 @@ function App() {
                     style={{ 
                       display: 'flex', 
                       justifyContent: 'space-between', 
-                      padding: '6px 10px', 
-                      border: '2px solid #111', 
-                      borderRadius: '8px', 
+                      alignItems: 'center',
+                      padding: '8px 12px', 
+                      border: '3px solid #000000', 
+                      borderRadius: '12px', 
                       fontSize: '0.85rem',
-                      background: isSaved ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)' 
+                      fontWeight: 900,
+                      background: isSaved ? '#E2F7E4' : '#FDE8E8' 
                     }}
                   >
                     <span>R{idx + 1}: <strong>{card.word}</strong></span>
-                    <span style={{ fontWeight: 'bold' }}>
+                    <span style={{ color: isSaved ? '#4BB75C' : '#E53B3B', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       {isSaved ? (
                         gameMode === 'all-vs-all' ? (
                           `Adivinada por ${teams.find(t => t.id === cardSavedByTeam[card.id])?.name || 'Equipo'} (+${card.points}) ✅`
                         ) : (
                           `Salvada (+${card.points}) ✅`
                         )
-                      ) : 'Hundida (0) ❌'}
+                      ) : (
+                        <>Hundida (0) ❌</>
+                      )}
                     </span>
                   </div>
                 );
@@ -1357,21 +1814,92 @@ function App() {
             </div>
           </div>
 
-          {/* Marcador general */}
-          <div className="cartoon-card" style={{ margin: '8px 0', padding: '10px' }}>
-            <h4 style={{ margin: '0 0 6px 0', fontSize: '0.95rem' }}>Marcador General</h4>
-            <div className="score-board-compact">
-              {teams.map(t => (
-                <div key={t.id} className="team-score-row-compact" style={{ borderColor: t.color }}>
-                  <span>{t.name}</span>
-                  <span style={{ background: t.color, color: 'white', border: '2px solid #111', padding: '1px 8px', borderRadius: '6px', fontSize: '1rem' }}>{t.score} pts</span>
+          {/* Team score cards with offset background shadows */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px', margin: '10px 0 20px 0' }}>
+            {teams.slice(0, 2).map(t => (
+              <div key={t.id} style={{ position: 'relative', height: '100px' }}>
+                {/* Shadow card offset background */}
+                <div 
+                  style={{ 
+                    position: 'absolute', 
+                    top: '6px', 
+                    left: '6px', 
+                    right: '-6px', 
+                    bottom: '-6px', 
+                    background: t.color, 
+                    border: '4.5px solid #000000', 
+                    borderRadius: '20px',
+                    zIndex: 1
+                  }}
+                ></div>
+                
+                {/* Main card foreground */}
+                <div 
+                  style={{ 
+                    position: 'absolute', 
+                    top: 0, 
+                    left: 0, 
+                    right: 0, 
+                    bottom: 0, 
+                    background: '#FFFFFF', 
+                    border: '4.5px solid #000000', 
+                    borderRadius: '20px',
+                    padding: '10px 6px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    zIndex: 2,
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  {/* Circular profile dot */}
+                  <div 
+                    style={{ 
+                      width: '28px', 
+                      height: '28px', 
+                      borderRadius: '50%', 
+                      backgroundColor: t.color, 
+                      border: '3px solid #000000',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#FFFFFF" strokeWidth="3">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </div>
+                  
+                  <span style={{ fontWeight: 900, fontSize: '0.85rem', color: '#000000', textAlign: 'center' }}>
+                    {t.name}
+                  </span>
+                  
+                  <span style={{ fontWeight: 900, fontSize: '1.15rem', color: t.color, textShadow: '1px 1px 0px #000000' }}>
+                    {t.score} pts
+                  </span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
-          <button className="cartoon-btn animate-float" style={{ background: 'var(--accent-yellow)', width: '100%' }} onClick={nextTurn}>
-            Continuar Juego ➡️
+          <button 
+            className="cartoon-btn" 
+            style={{ 
+              background: 'var(--accent-yellow)', 
+              width: '100%',
+              padding: '14px 20px',
+              fontSize: '1.5rem',
+              borderWidth: '5px',
+              borderRadius: '16px',
+              boxShadow: '0 6px 0px #000',
+              fontWeight: 900
+            }} 
+            onClick={nextTurn}
+          >
+            Siguiente Ronda ➔
           </button>
         </div>
       )}
