@@ -34,12 +34,6 @@ const SettingsIcon = () => (
   </svg>
 );
 
-const SparkIcon = ({ style }: { style: React.CSSProperties }) => (
-  <svg viewBox="0 0 24 24" width="26" height="26" style={{ position: 'absolute', pointerEvents: 'none', filter: 'drop-shadow(2px 2px 0px #000)', ...style }}>
-    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9Z" fill="#E53B3B" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-  </svg>
-);
-
 const BlueMaskIcon = ({ width = 55, height = 55, style }: { width?: number; height?: number; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 100 100" width={width} height={height} style={{ marginLeft: '8px', alignSelf: 'center', filter: 'drop-shadow(2.5px 2.5px 0px #000)', transform: 'rotate(5deg)', ...style }}>
     <path d="M10,40 C10,15 90,15 90,40 C90,75 70,90 50,90 C30,90 10,75 10,40 Z" fill="#459CFF" stroke="#000" strokeWidth="6" strokeLinejoin="round" />
