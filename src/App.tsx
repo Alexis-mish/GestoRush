@@ -40,12 +40,18 @@ const SparkIcon = ({ style }: { style: React.CSSProperties }) => (
   </svg>
 );
 
-const BlueMaskIcon = () => (
-  <svg viewBox="0 0 100 100" width="55" height="55" style={{ marginLeft: '8px', alignSelf: 'center', filter: 'drop-shadow(2px 2px 0px #000)', transform: 'rotate(5deg)' }}>
+const BlueMaskIcon = ({ width = 55, height = 55, style }: { width?: number; height?: number; style?: React.CSSProperties }) => (
+  <svg viewBox="0 0 100 100" width={width} height={height} style={{ marginLeft: '8px', alignSelf: 'center', filter: 'drop-shadow(2.5px 2.5px 0px #000)', transform: 'rotate(5deg)', ...style }}>
     <path d="M10,40 C10,15 90,15 90,40 C90,75 70,90 50,90 C30,90 10,75 10,40 Z" fill="#459CFF" stroke="#000" strokeWidth="6" strokeLinejoin="round" />
     <path d="M25,40 Q35,30 45,40" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" />
     <path d="M55,40 Q65,30 75,40" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" />
     <path d="M30,60 Q50,80 70,60 Q50,70 30,60" fill="#000" stroke="#000" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const TitleStarIcon = ({ style }: { style?: React.CSSProperties }) => (
+  <svg viewBox="0 0 24 24" width="28" height="28" style={{ filter: 'drop-shadow(2px 2px 0px #000)', pointerEvents: 'none', ...style }}>
+    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9Z" fill="#E53B3B" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
   </svg>
 );
 
@@ -734,8 +740,8 @@ function App() {
     <div className="screen-body">
       {/* Conditionally render header based on screen */}
       {screen === 'title' && (
-        <div className="top-bar" style={{ padding: '4px 6px' }}>
-          <button className="sound-toggle" onClick={toggleMuted} title={muted ? 'Activar sonido' : 'Silenciar'}>
+        <div className="top-bar title-screen-top-bar" style={{ padding: '8px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button className="sound-toggle title-sound-toggle" onClick={toggleMuted} title={muted ? 'Activar sonido' : 'Silenciar'} style={{ width: '56px', height: '56px', borderRadius: '50%', border: '4.5px solid #000000', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFFFFF', boxShadow: '3.5px 3.5px 0px #000000', flexShrink: 0 }}>
             <SoundIcon muted={muted} />
           </button>
           
@@ -744,21 +750,23 @@ function App() {
             onClick={toggleFullscreen}
             style={{
               background: '#FFFFFF',
-              border: '3.5px solid #000000',
-              borderRadius: '20px',
-              padding: '4px 14px',
+              border: '4.5px solid #000000',
+              borderRadius: '25px',
+              padding: '6px 16px',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: '2px 2px 0px #000000',
-              cursor: 'pointer'
+              boxShadow: '3.5px 3.5px 0px #000000',
+              cursor: 'pointer',
+              height: '48px',
+              boxSizing: 'border-box'
             }}
           >
             <WindowIcon />
-            <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#000000', fontFamily: 'Fredoka' }}>{isFullscreen ? 'Ventana' : 'Completa'}</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#000000', fontFamily: 'Fredoka' }}>{isFullscreen ? 'Ventana' : 'Completa'}</span>
           </button>
           
-          <button className="sound-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones">
+          <button className="sound-toggle title-help-toggle" onClick={() => setShowInstructions(true)} title="Instrucciones" style={{ width: '56px', height: '56px', borderRadius: '50%', border: '4.5px solid #000000', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFFFFF', boxShadow: '3.5px 3.5px 0px #000000', flexShrink: 0 }}>
             <QuestionIcon />
           </button>
         </div>
@@ -766,52 +774,64 @@ function App() {
 
       {/* A. TITLE SCREEN */}
       {screen === 'title' && (
-        <div className="screen-layout screen-pop-elastic" style={{ justifyContent: 'space-between', padding: '10px 0 5px 0' }}>
-          <div style={{ marginTop: '20px', width: '100%', flexShrink: 0 }}>
-            <div className="hanging-sign-container">
-              <div className="rope-nail"></div>
-              <div className="rope-diagonal left-diag"></div>
-              <div className="rope-diagonal right-diag"></div>
-              <div className="rope left-rope"></div>
-              <div className="rope right-rope"></div>
-              <div className="wooden-board">
-                <div className="board-line board-line-1"></div>
-                <div className="board-line board-line-2"></div>
-                <div className="hanger-hole left-hole"></div>
-                <div className="hanger-hole right-hole"></div>
-                
-                <div className="sign-text-container">
-                  <span className="sign-title-top">GESTO</span>
-                  <div className="sign-title-bottom-row">
-                    <span className="sign-title-bottom">RUSH</span>
-                    <BlueMaskIcon />
+        <div className="screen-layout screen-pop-elastic title-screen-layout" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '15px 0 10px 0', height: '100%' }}>
+          
+          {/* Centered Clapperboard Logo */}
+          <div className="title-clapperboard-container" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px 0' }}>
+            <div className="title-clapperboard">
+              {/* Clapper Hinge on Left */}
+              <div className="title-clapper-hinge">
+                <div className="title-clapper-nail"></div>
+                <div className="title-clapper-nail"></div>
+              </div>
+              
+              {/* Clapper Arm (Tilted) */}
+              <div className="title-clapper-arm">
+                <div className="title-clapper-arm-stripes"></div>
+              </div>
+
+              {/* Clapper Board Body */}
+              <div className="title-clapper-body">
+                {/* Red star top left */}
+                <TitleStarIcon style={{ position: 'absolute', top: '25px', left: '15px', transform: 'rotate(-10deg) scale(0.95)' }} />
+                {/* Red star bottom left */}
+                <TitleStarIcon style={{ position: 'absolute', bottom: '30px', left: '15px', transform: 'rotate(15deg) scale(0.95)' }} />
+                {/* Red star top right */}
+                <TitleStarIcon style={{ position: 'absolute', top: '15px', right: '40px', transform: 'rotate(25deg) scale(0.95)' }} />
+
+                {/* Title Text */}
+                <div className="title-text-wrapper">
+                  <span className="title-text-gestos">GESTOS</span>
+                  <div className="title-text-rush-row">
+                    <span className="title-text-rush">RUSH</span>
+                    <BlueMaskIcon width={62} height={62} style={{ filter: 'drop-shadow(3px 3px 0px #000)' }} />
                   </div>
                 </div>
-                
-                <SparkIcon style={{ top: '-10px', left: '15%', transform: 'rotate(-15deg)' }} />
-                <SparkIcon style={{ top: '35px', left: '8%', transform: 'rotate(20deg) scale(0.8)' }} />
-                <SparkIcon style={{ top: '10px', right: '12%', transform: 'rotate(15deg)' }} />
-                <SparkIcon style={{ bottom: '20px', right: '15%', transform: 'rotate(-10deg) scale(0.9)' }} />
               </div>
             </div>
           </div>
-          
-          <div style={{ flex: 1 }}></div>
 
           <button 
-            className="cartoon-btn" 
+            className="cartoon-btn title-play-btn" 
             style={{ 
               padding: '16px 20px', 
-              fontSize: '1.8rem', 
-              background: 'var(--accent-yellow)', 
+              fontSize: '2.3rem', 
+              background: '#FFC700', 
               width: '100%',
               borderWidth: '5px',
-              borderRadius: '16px',
-              boxShadow: '0 6px 0px #000'
+              borderRadius: '20px',
+              boxShadow: '0 6px 0px #000',
+              fontWeight: 900,
+              fontFamily: 'Fredoka',
+              letterSpacing: '1px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px'
             }}
             onClick={startSetup}
           >
-            ¡JUGAR! 🚀
+            ¡JUGAR! <span style={{ display: 'inline-block', transform: 'rotate(-15deg)' }}>🚀</span>
           </button>
         </div>
       )}
